@@ -113,6 +113,15 @@ The plugin has **no runtime dependencies** — the `@opencode/plugin` import is 
 
 Targeted at the OpenCode 2 beta (`opencode2`, `@opencode/plugin` 0.0.0-beta-192xx). The V2 plugin API is explicitly in flux — after upgrading `opencode2`, run `npm test && npm typecheck` and check the log line `[opencode2-advisor] loaded (…)` at service start. The plugin only uses the documented plugin-context surface (`tool.transform`, `session.create/context/prompt/wait/interrupt/switchAgent/switchModel`, `agent.get`), so it should keep working across beta bumps; if a field it reads from messages or agents changes shape, the worst case is a degraded transcript, not a crash.
 
+**API drift data points** (verified 2026-09-08, `@opencode-ai/plugin` 1.18.15 `v2/promise` preview types vs the running `opencode2` beta-19234 / `@opencode/plugin` 0.0.0-beta-19296 types):
+
+| preview (1.18.15) | beta (19234+) |
+| --- | --- |
+| `ctx.aisdk.language(cb)` | `ctx.aisdk.hook.language(cb)` |
+| `model.modalities.input` | `model.capabilities.input` |
+
+The definition shape (`{ id, setup }`) did not change, so preview-era plugins still *parse* — they crash at runtime on the moved hook (`ctx.aisdk.language is not a function`). The language hook callback receives the same `{ model, language?: LanguageModelV3 }` payload, and the new registration also accepts an optional `{ providerID }` scope. Porting advice: resolve the hook tolerantly (`aisdk.hook?.language ?? aisdk.language`) and fail soft, so the plugin stays loadable across both host generations.
+
 ## Credits
 
 - Core logic (redaction, budget, validation, transcript, prompt) vendored from [`@mcrescenzo/opencode-advisor`](https://github.com/mcrescenzo/opencode-advisor) by Michael Crescenzo (MIT) — see [NOTICE.md](./NOTICE.md).
