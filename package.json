@@ -1,0 +1,43 @@
+{
+  "name": "opencode2-advisor",
+  "version": "0.1.0",
+  "description": "OpenCode 2 plugin: an advisor() tool that consults a different model in a read-only forked session",
+  "keywords": [
+    "opencode",
+    "opencode2",
+    "opencode-plugin",
+    "advisor",
+    "second-opinion",
+    "llm"
+  ],
+  "license": "MIT",
+  "author": "Tomáš Kalina",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomKalina/opencode2-advisor.git"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "agents",
+    "LICENSE",
+    "NOTICE.md",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@opencode/plugin": "0.0.0-beta-19296",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}
